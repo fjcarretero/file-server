@@ -26,7 +26,7 @@ function random (howMany, chars) {
 
 console.log("Estoy!");
 
-fs.writeFile(__dirname + "/htdigest", "admin:" + random(10), function(err) {
+fs.writeFile(__dirname + "/htdigest", "admin:madrid:" + random(10), function(err) {
     if(err) {
         return console.log(err);
     }
