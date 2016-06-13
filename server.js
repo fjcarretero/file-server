@@ -23,10 +23,17 @@ function random (howMany, chars) {
 
     return value.join('');
 }
-
 console.log("Estoy!");
 
-fs.writeFile(__dirname + "/htdigest", "admin:madrid:" + random(10), function(err) {
+var pass = random(10);
+console.log(pass);
+var md5sum = crypto.createHash('md5');
+
+md5sum.update("admin:madrid:" + pass);
+var d = md5sum.digest('hex');
+console.log(d);
+
+fs.writeFile(__dirname + "/htdigest", "admin:madrid:" + d, function(err) {
     if(err) {
         return console.log(err);
     }
