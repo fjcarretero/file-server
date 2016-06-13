@@ -1,0 +1,17 @@
+{
+	"name": "jsDAV-test",
+	"version": "0.0.1",
+	"private": true,
+	"main": "server.js",
+	"dependencies": {
+      "jsDAV": "0.3.4"
+	},
+	"engine": {
+        "node": "*",
+        "npm": "*"
+    },
+    "scripts": {
+        "dev": "nodemon --ignore node_modules/ server.js",
+        "start": "node server.js"
+    }
+}
