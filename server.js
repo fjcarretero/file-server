@@ -12,4 +12,4 @@ var jsDAV_Locks_Backend_FS = require("jsDAV/lib/DAV/plugins/locks/fs");
 jsDAV.createServer({
 node: __dirname + "/../test/assets",
 locksBackend: jsDAV_Locks_Backend_FS.new(__dirname + "/../test/assets")
-}, 8000);
+}, 8000, "0.0.0.0");
