@@ -26,7 +26,7 @@ function random (howMany, chars) {
 
 console.log("Estoy!");
 
-fs.writeFile(__dirname + "/assets/htdigest", "admin:" + random(10), function(err) {
+fs.writeFile(__dirname + "/htdigest", "admin:" + random(10), function(err) {
     if(err) {
         return console.log(err);
     }
@@ -39,6 +39,6 @@ fs.writeFile(__dirname + "/assets/htdigest", "admin:" + random(10), function(err
     jsDAV.createServer({
       node: __dirname + "/../test/assets",
       locksBackend: jsDAV_Locks_Backend_FS.new(__dirname + "/../test/assets"),
-      authBackend: jsDAV_Auth_Backend_File.new(__dirname + "/assets/htdigest")
+      authBackend: jsDAV_Auth_Backend_File.new(__dirname + "/htdigest")
     }, 8000, "0.0.0.0");
 }); 
