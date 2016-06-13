@@ -7,9 +7,36 @@
 */
 "use strict";
 var jsDAV = require("jsDAV");
-jsDAV.debugMode = true;
-var jsDAV_Locks_Backend_FS = require("jsDAV/lib/DAV/plugins/locks/fs");
-jsDAV.createServer({
-node: __dirname + "/../test/assets",
-locksBackend: jsDAV_Locks_Backend_FS.new(__dirname + "/../test/assets")
-}, 8000, "0.0.0.0");
+var crypto = require('crypto');
+var fs = require('fs');
+
+function random (howMany, chars) {
+    chars = chars 
+        || "abcdefghijklmnopqrstuwxyzABCDEFGHIJKLMNOPQRSTUWXYZ0123456789";
+    var rnd = crypto.randomBytes(howMany)
+        , value = new Array(howMany)
+        , len = chars.length;
+
+    for (var i = 0; i < howMany; i++) {
+        value[i] = chars[rnd[i] % len]
+    };
+
+    return value.join('');
+}
+
+fs.writeFile(__dirname + "/assets/htdigest", "admin:" + random(10), function(err) {
+    if(err) {
+        return console.log(err);
+    }
+
+    console.log("The file was saved!");
+    
+    jsDAV.debugMode = true;
+    var jsDAV_Locks_Backend_FS = require("jsDAV/lib/DAV/plugins/locks/fs");
+    var jsDAV_Auth_Backend_File = require("jsDAV/lib/DAV/plugins/auth/file");
+    jsDAV.createServer({
+      node: __dirname + "/../test/assets",
+      locksBackend: jsDAV_Locks_Backend_FS.new(__dirname + "/../test/assets"),
+      authBackend: jsDAV_Auth_Backend_File.new(__dirname + "/assets/htdigest")
+    }, 8000, "0.0.0.0");
+}); 
