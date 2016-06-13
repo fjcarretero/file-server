@@ -39,6 +39,7 @@ fs.writeFile(__dirname + "/htdigest", "admin:madrid:" + random(10), function(err
     jsDAV.createServer({
       node: __dirname + "/../test/assets",
       locksBackend: jsDAV_Locks_Backend_FS.new(__dirname + "/../test/assets"),
-      authBackend: jsDAV_Auth_Backend_File.new(__dirname + "/htdigest")
+      authBackend: jsDAV_Auth_Backend_File.new(__dirname + "/htdigest"),
+      realm: "madrid"
     }, 8000, "0.0.0.0");
 }); 
