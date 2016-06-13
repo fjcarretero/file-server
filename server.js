@@ -24,6 +24,8 @@ function random (howMany, chars) {
     return value.join('');
 }
 
+console.log("Estoy!");
+
 fs.writeFile(__dirname + "/assets/htdigest", "admin:" + random(10), function(err) {
     if(err) {
         return console.log(err);
