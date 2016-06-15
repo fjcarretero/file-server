@@ -27,26 +27,32 @@ console.log("Estoy!");
 
 var pass = random(10);
 console.log(pass);
+process.env.ACCESS_PASSWORD = pass;
 var md5sum = crypto.createHash('md5');
 
 md5sum.update("admin:madrid:" + pass);
 var d = md5sum.digest('hex');
 console.log(d);
-
-fs.writeFile(__dirname + "/htdigest", "admin:madrid:" + d, function(err) {
-    if(err) {
-        return console.log(err);
+fs.exists(process.env.ASSETS_FOLDER, function(exists){
+    if(!exists){
+        return console.log('Directory ' + process.env.ASSETS_FOLDER + ' does not exist');
+    } else {
+        fs.writeFile(__dirname + "/htdigest", "admin:madrid:" + d, function(err) {
+            if(err) {
+                return console.log(err);
+            }
+        
+            console.log("The file was saved!");
+            
+            jsDAV.debugMode = true;
+            var jsDAV_Locks_Backend_FS = require("jsDAV/lib/DAV/plugins/locks/fs");
+            var jsDAV_Auth_Backend_File = require("jsDAV/lib/DAV/plugins/auth/file");
+            jsDAV.createServer({
+              node: process.env.ASSETS_FOLDER,
+              locksBackend: jsDAV_Locks_Backend_FS.new(process.env.ASSETS_FOLDER),
+              authBackend: jsDAV_Auth_Backend_File.new(__dirname + "/htdigest"),
+              realm: "madrid"
+            }, 8000, "0.0.0.0");
+        });         
     }
-
-    console.log("The file was saved!");
-    
-    jsDAV.debugMode = true;
-    var jsDAV_Locks_Backend_FS = require("jsDAV/lib/DAV/plugins/locks/fs");
-    var jsDAV_Auth_Backend_File = require("jsDAV/lib/DAV/plugins/auth/file");
-    jsDAV.createServer({
-      node: __dirname + "/../test/assets",
-      locksBackend: jsDAV_Locks_Backend_FS.new(__dirname + "/../test/assets"),
-      authBackend: jsDAV_Auth_Backend_File.new(__dirname + "/htdigest"),
-      realm: "madrid"
-    }, 8000, "0.0.0.0");
-}); 
+});
