@@ -25,9 +25,14 @@ function random (howMany, chars) {
 }
 console.log("Estoy!");
 
-var pass = random(10);
-console.log(pass);
-process.env.ACCESS_PASSWORD = pass;
+var pass;
+if (process.env.ACCESS_PASSWORD){
+    pass = process.env.ACCESS_PASSWORD;
+} else {
+    pass = random(10);
+    console.log(pass);
+    process.env.ACCESS_PASSWORD = pass;
+}
 var md5sum = crypto.createHash('md5');
 
 md5sum.update("admin:madrid:" + pass);
